@@ -1,16 +1,29 @@
 import { Link } from "react-router-dom";
-import {
-    Button,
-    Card,
-    Form,
-    Input,
-    Checkbox,
-  } from "antd";
+import { Button, Card, Form, Input, Checkbox, notification } from "antd";
+import { Component } from "react/cjs/react.production.min";
+import {signUpApi} from "../../../api/user"
 
-export default function RegisterForm(){
+export default class RegisterForm extends Component{
     
-    const onFinish = (values) => {
-      console.log("Success:", values);
+  constructor(props) {
+    super(props);
+  }
+
+  render(){
+    const {handleSignUp} = this.props;
+    
+    const onFinish = async (values) => {      
+      const result = await signUpApi(values);  
+      if(!result.ok){
+        notification["error"]({
+          message: result.message
+        });        
+      }else{
+        notification["success"]({
+          message: result.message
+        })
+        handleSignUp();
+      }  
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -19,7 +32,7 @@ export default function RegisterForm(){
 
     return(
         
-        <Card
+      <Card
         className="card-signup header-solid h-full ant-card pt-0"
         title={<h5>Register </h5>}
         bordered="false"
@@ -39,40 +52,81 @@ export default function RegisterForm(){
          <p className="text-center my-25 font-semibold text-muted">Or</p>
          */}
         
-        <Form
-          name="basic"
-          initialValues={{ remember: true }}
+        <Form          
+          name="signUp"
+          initialValues={{ remember: false }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           className="row-col"
         >
           <Form.Item
             name="Name"
+            hasFeedback
             rules={[
               { required: true, message: "Please input your username!" },
+              //{ min: 1, message: "least 3 characters!" }
             ]}
           >
-            <Input placeholder="Name" />
+            <Input placeholder="Name" minLength={2} maxLength={50} />
           </Form.Item>
           <Form.Item
             name="email"
+            hasFeedback
             rules={[
-              { required: true, message: "Please input your email!" },
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              { 
+                required: true, 
+                message: "Please input your email!" 
+              },              
             ]}
           >
             <Input placeholder="email" />
           </Form.Item>
           <Form.Item
             name="password"
+
             rules={[
               { required: true, message: "Please input your password!" },
             ]}
           >
-            <Input placeholder="Password" />
+            <Input type="Password" placeholder="Password" />
+          </Form.Item>
+          <Form.Item
+            name="passwordRepeat"
+            rules={[
+              {
+                required: true,
+                message: 'Please confirm your password!',
+              },
+              ({ getFieldValue }) => ({ 
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+    
+                  return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                },
+              }),
+            ]}
+          >
+            <Input type="Password" placeholder="Repeat Password" />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>
+          <Form.Item 
+            name="remember"  
+            valuePropName="checked" 
+            hasFeedback
+            rules={[
+              {
+                validator: (_, value) =>
+                  value ? Promise.resolve() : Promise.reject(new Error('Should accept Terms and Conditions')),
+              },
+            ]}
+          >
+            <Checkbox >
               I agree the{" "}
               <a href="#pablo" className="font-bold text-dark">
                 Terms and Conditions
@@ -92,10 +146,12 @@ export default function RegisterForm(){
         </Form>
         <p className="font-semibold text-muted text-center">
           Already have an account?{" "}
-          <Link to="/admin/signIn" className="font-bold text-dark">
+          <Link to="/admin/signIn" onClick={() => handleSignUp()} className="font-bold text-dark">
             Sign In
           </Link>
         </p>
       </Card>
     )
+  }
+
 }

@@ -11,7 +11,7 @@
 */
 
 import { useState, useEffect } from "react";
-
+import {logout} from '../../api/auth' 
 import {
   Row,
   Col,
@@ -26,6 +26,7 @@ import {
   Typography,
   Switch,
 } from "antd";
+import { PoweroffOutlined } from '@ant-design/icons';
 
 import {
   SearchOutlined,
@@ -258,6 +259,13 @@ function Header({
   handleSidenavType,
   handleFixedNavbar,
 }) {
+
+  const logoutUser = () => {
+    logout();
+    window.location.href = '/admin';
+        
+  }
+
   const { Title, Text } = Typography;
 
   const [visible, setVisible] = useState(false);
@@ -421,9 +429,9 @@ function Header({
               </div>
             </div>
           </Drawer>
-          <Link to="/sign-in" className="btn-sign-in">
+          <Link to="/#"   onClick={() => logoutUser()} className="btn-sign-in">
             {profile}
-            <span>Sign in</span>
+            <span>Log out</span>
           </Link>
           <Input
             className="header-search"

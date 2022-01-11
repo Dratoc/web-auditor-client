@@ -1,16 +1,38 @@
-import { Link } from "react-router-dom";
-import {
-    Button,
-    Card,
-    Form,
-    Input,
-    Checkbox,
-  } from "antd";
+import {ACCESS_TOKEN, REFRESH_TOKEN} from "../../../utils/constans";
+import { Link, useHistory } from "react-router-dom";
+import { Button, Card, Form, Input, notification } from "antd";
+import {signInApi} from "../../../api/user";
 
-export default function RegisterForm(){
+
+export default function RegisterForm(props){
     
-    const onFinish = (values) => {
-      console.log("Success:", values);
+  let history = useHistory();
+
+  const {handleSignUp} = props;
+  
+    const onFinish = async (values) => {
+
+      const result = await signInApi(values);
+
+      if(result.message){
+        notification["error"]({
+          message: result.message
+        });
+      }else{
+        const {accessToken, refreshToken} = result;
+        localStorage.setItem(ACCESS_TOKEN, accessToken);
+        localStorage.setItem(REFRESH_TOKEN, refreshToken);
+
+        notification["success"]({
+          message: "Login Successfully"
+        })
+        
+        window.location.href = '/admin';
+        
+        //history.push("/");
+      }
+
+
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -48,7 +70,9 @@ export default function RegisterForm(){
         >
           <Form.Item
             name="email"
+            hasFeedback
             rules={[
+              { type: "email", message: "Please input valid email!" },
               { required: true, message: "Please input your email!" },
             ]}
           >
@@ -60,7 +84,7 @@ export default function RegisterForm(){
               { required: true, message: "Please input your password!" },
             ]}
           >
-            <Input placeholder="Password" />
+            <Input type="password" placeholder="Password" />
           </Form.Item>
 
           <Form.Item>
@@ -75,7 +99,7 @@ export default function RegisterForm(){
         </Form>
         <p className="font-semibold text-muted text-center">
             Don't have an account?{" "}
-          <Link to="/admin/signIn" className="font-bold text-dark">
+          <Link to="/admin/signIn" onClick={() => handleSignUp()} className="font-bold text-dark">
             Sign Up
           </Link>
         </p>

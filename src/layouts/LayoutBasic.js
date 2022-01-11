@@ -1,6 +1,5 @@
 import { Layout } from "antd";
 import { Route, Switch } from 'react-router-dom';
-import routes from '../config/routes';
 import './LayoutBasic';
 
 export default function LayoutBasic(props){

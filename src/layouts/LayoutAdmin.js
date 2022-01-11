@@ -2,37 +2,43 @@ import { Redirect, Route } from 'react-router-dom';
 import { Layout } from "antd";
 import "./LayoutAdmin.scss";
 import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
-import routes from '../config/routes';
 import Main from '../components/layout/Main';
 import "antd/dist/antd.css";
 import "../assets/styles/main.css";
 import "../assets/styles/responsive.css";
 import AdminSignUp from '../pages/admin/SignUp';
-import AdminSignIn from '../pages/admin/SignIn';
+import {getAccessTokenApi , getRefreshTokenApi} from '../api/auth';
+import useAuth from '../hooks/useAuth';
 
 export default function LayoutAdmin(props){
     const { routes } = props;
-    const {Header, Content, Footer} = Layout;
+    const {Footer} = Layout;
+    const {user, isLoading} = useAuth();
+   
+    //const accessToken = getAccessTokenApi();
+    //const refreshToken = getRefreshTokenApi();
 
-    const user = null;
-
-    if(!user){
+    if(!user && !isLoading){
         return(
             <>
-                <Route Path="/admin/login" exact={true} component={AdminSignUp}></Route>                
-                <Redirect to="/admin/login"></Redirect>
+                <Route key="signIn" Path="/admin/signIn" exact={true} component={AdminSignUp}></Route>                
+                <Redirect  key="signInRedirect" to="/admin/signIn"></Redirect>
             </>
         );
     }
 
-    return(
-        <div className="App">
-            <Main>
-                <LoadRouters routes={routes}></LoadRouters>
-            </Main>
-            <Footer>Hernan Moreno</Footer>
-        </div>
-    );
+    if(user && !isLoading){
+        return(
+            <div className="App">
+                <Main>
+                    <LoadRouters routes={routes}></LoadRouters>
+                </Main>
+                <Footer></Footer>
+            </div>
+        );
+    }
+
+    return null;
 }
 
 function LoadRouters({routes}){

@@ -20,6 +20,9 @@ export default function RegisterForm(props){
         });
       }else{
         const {accessToken, refreshToken} = result;
+        console.log("acces token : ")
+        console.log(accessToken)
+
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem(REFRESH_TOKEN, refreshToken);
 

@@ -45,5 +45,25 @@ export function signInApi(data){
     .then(result => {        
         return result;
     })
-    .catch(error => { return error.message});
+    .catch(error => { return error});
+}
+
+export function getUsersApi(token){
+
+    const url = `${basePath}/${apiVersion}/users`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
+    var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+
+    return fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(result => {return result})
+    .catch(error => {return error.message});
 }

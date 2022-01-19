@@ -9,6 +9,8 @@ import AdminHome from '../pages/admin/Admin';
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import Error404 from "../pages/Error404";
+import Tables from "../pages/Tables";
+import Users from "../pages/admin/Users";
 
 const routes=[
     {
@@ -21,6 +23,16 @@ const routes=[
                 path: "/admin",
                 exact: true,
                 component: AdminHome               
+            },
+            {
+                path: "/admin/tables",
+                exact: true,
+                component: Tables               
+            },
+            {
+                path: "/admin/users",
+                exact: true,
+                component: Users               
             },
             {
                 component: Error404

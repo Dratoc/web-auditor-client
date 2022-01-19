@@ -114,8 +114,6 @@ export default class SignUp extends Component {
       //console.log(onRegister);
     }
 
-    
-
     return (
       <>
         <div className="layout-default ant-layout layout-sign-up">

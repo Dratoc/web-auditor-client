@@ -3,7 +3,6 @@ import {basePath, apiVersion} from './config';
 export function signUpApi(data){
    
     const url = `${basePath}/${apiVersion}/sign-up`;
-              
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -18,7 +17,7 @@ export function signUpApi(data){
     .then(response => response.json())
     .then(result =>  {        
         if(result.user){
-            return { ok: true, message: `Bienvenido ${data.Name} ` }
+            return { ok: true, message: `Register Sucessfully, welcome ${data.name} ` }
         }
         return { ok: false, message: result.message }
     })
@@ -39,7 +38,6 @@ export function signInApi(data){
         body: JSON.stringify(data),
         redirect: 'follow'
     };
-
     return fetch(url, requestOptions)
     .then(response => response.json())
     .then(result => {        
@@ -59,6 +57,63 @@ export function getUsersApi(token){
     var requestOptions = {
     method: 'GET',
     headers: myHeaders,
+    redirect: 'follow'
+    };
+
+    return fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(result => {return result})
+    .catch(error => {return error.message});
+}
+
+export function uploadAvatarApi(token, avatar, userId){
+    const url = `${basePath}/${apiVersion}/upload-avatar/${userId}`;
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    var formdata = new FormData();
+    formdata.append("avatar", avatar, avatar.name);
+
+    var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: formdata,
+    redirect: 'follow'
+    };
+
+    return fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(result => { return result })
+    .catch(error => {return error.message});
+}
+
+export function getAvatarApi(avatarName){
+    const url = `${basePath}/${apiVersion}/get-avatar/${avatarName}`;
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      
+    return fetch(url, requestOptions)
+        .then(response => response.url )
+        .catch(error => {return error});
+}
+
+export function updateUserApi(token, user, userId){
+    const url = `${basePath}/${apiVersion}/update-user/${userId}`;
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify(user);
+
+    var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
     redirect: 'follow'
     };
 

@@ -13,15 +13,12 @@ export default function RegisterForm(props){
     const onFinish = async (values) => {
 
       const result = await signInApi(values);
-
       if(result.message){
         notification["error"]({
           message: result.message
         });
       }else{
         const {accessToken, refreshToken} = result;
-        console.log("acces token : ")
-        console.log(accessToken)
 
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem(REFRESH_TOKEN, refreshToken);
@@ -38,6 +35,7 @@ export default function RegisterForm(props){
 
     };
 
+    
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
       };

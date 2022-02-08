@@ -12,7 +12,8 @@ export default class RegisterForm extends Component{
   render(){
     const {handleSignUp} = this.props;
     
-    const onFinish = async (values) => {      
+    const onFinish = async (values) => {  
+      console.log(values);    
       const result = await signUpApi(values);  
       if(!result.ok){
         notification["error"]({
@@ -60,7 +61,7 @@ export default class RegisterForm extends Component{
           className="row-col"
         >
           <Form.Item
-            name="Name"
+            name="name"
             hasFeedback
             rules={[
               { required: true, message: "Please input your username!" },
@@ -83,7 +84,7 @@ export default class RegisterForm extends Component{
               },              
             ]}
           >
-            <Input placeholder="email" />
+            <Input placeholder="Email" />
           </Form.Item>
           <Form.Item
             name="password"

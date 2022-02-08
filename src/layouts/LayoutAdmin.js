@@ -7,7 +7,7 @@ import "antd/dist/antd.css";
 import "../assets/styles/main.css";
 import "../assets/styles/responsive.css";
 import AdminSignUp from '../pages/admin/SignUp';
-import {getAccessTokenApi , getRefreshTokenApi} from '../api/auth';
+//import {getAccessTokenApi , getRefreshTokenApi} from '../api/auth';
 import useAuth from '../hooks/useAuth';
 
 export default function LayoutAdmin(props){
